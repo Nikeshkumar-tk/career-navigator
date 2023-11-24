@@ -15,7 +15,7 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { useMutation } from 'react-query'
-import { bachelorDegrees, currentlyPursuingEducation, currentlyPursuingEducationNames, masterDegrees, stream_12th } from "@/config/education"
+import { bachelorDegrees, currentlyPursuingEducation, currentlyPursuingEducationNames, masterDegrees, stream_10th, stream_12th } from "@/config/education"
 import { useToast } from "@/components/ui/use-toast"
 import { ToastAction } from "@/components/ui/toast"
 import { useRouter } from "next/navigation"
@@ -26,9 +26,7 @@ const userSetupFormSchema = z.object({
     }),
     email: z.string({ required_error: 'Please enter a valid email' }).email(),
     currentlyPursuing: z.enum(currentlyPursuingEducationNames),
-    stream12th: z.optional(z.string()),
-    bachelorsDegreeStream: z.optional(z.string()),
-    mastersDegreeStream: z.optional(z.string())
+    stream: z.string()
 })
 
 type UserInfo = z.infer<typeof userSetupFormSchema>
@@ -141,7 +139,7 @@ export default function NewUserSetupPage() {
                         {form.watch("currentlyPursuing") === "12 th" && (
                             <FormField
                                 control={form.control}
-                                name="stream12th"
+                                name="stream"
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Stream</FormLabel>
@@ -166,7 +164,7 @@ export default function NewUserSetupPage() {
                         {form.watch('currentlyPursuing') === "Bachelor's Degree" && (
                             <FormField
                                 control={form.control}
-                                name="bachelorsDegreeStream"
+                                name="stream"
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Stream</FormLabel>
@@ -191,7 +189,7 @@ export default function NewUserSetupPage() {
                         {form.watch('currentlyPursuing') === "Master's Degree" && (
                             <FormField
                                 control={form.control}
-                                name="mastersDegreeStream"
+                                name="stream"
                                 render={({ field }) => (
                                     <FormItem>
                                         <FormLabel>Stream</FormLabel>
@@ -203,6 +201,30 @@ export default function NewUserSetupPage() {
                                             </FormControl>
                                             <SelectContent>
                                                 {masterDegrees.map(item => (
+                                                    <SelectItem key={item} value={item}>{item}</SelectItem>
+                                                ))}
+                                            </SelectContent>
+                                        </Select>
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                        )}
+                        {form.watch('currentlyPursuing') === "10 th" && (
+                            <FormField
+                                control={form.control}
+                                name="stream"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Stream</FormLabel>
+                                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                            <FormControl>
+                                                <SelectTrigger>
+                                                    <SelectValue placeholder="Select your stream" />
+                                                </SelectTrigger>
+                                            </FormControl>
+                                            <SelectContent>
+                                                {stream_10th.map(item => (
                                                     <SelectItem key={item} value={item}>{item}</SelectItem>
                                                 ))}
                                             </SelectContent>

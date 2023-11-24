@@ -14,13 +14,12 @@ import Link from "next/link"
 import { redirect, useRouter } from 'next/navigation'
 
 export default async function Home() {
-  // const session = useSession()
-  // const router = useRouter()
+
   const session = await getServerSession(authOptions)
 
   if (session?.user.isNewUser) redirect('/new-user')
 
-  if (session?.user.isNewUser === false) redirect('/careers')
+  if (session?.user.isNewUser === false) redirect('/quiz')
 
   return (
     <div>

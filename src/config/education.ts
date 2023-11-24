@@ -161,5 +161,7 @@ export const bachelorDegrees = [
     'MS in Environmental Studies',
     'MS in Forestry'
   ];
+
+  export const stream_10th = ["Maths", "Science"]
   
       
