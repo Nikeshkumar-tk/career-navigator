@@ -24,7 +24,7 @@ export default function Home() {
     <div>
         <PageHeader className="pb-8">
         <Link
-          href="/docs/changelog"
+          href="/"
           className="inline-flex items-center rounded-lg bg-muted px-3 py-1 text-sm font-medium"
         >
           🎉 <Separator className="mx-2 h-4" orientation="vertical" />{" "}
@@ -39,7 +39,7 @@ export default function Home() {
         Discover Your Path: Empowering Students for Future Success.
         </PageHeaderDescription>
         <div className="flex w-screen justify-center items-center space-x-4 pb-8 pt-4 md:pb-10">
-          <Link href="/docs" className={cn(buttonVariants())}>
+          <Link href="/" className={cn(buttonVariants())}>
             Get Started
           </Link>
           {/* <Link
