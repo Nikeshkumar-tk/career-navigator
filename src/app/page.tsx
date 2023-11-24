@@ -1,4 +1,3 @@
-'use client'
 
 
 export const dynamic = 'force-dynamic'
@@ -6,23 +5,26 @@ export const dynamic = 'force-dynamic'
 import { PageHeader, PageHeaderDescription, PageHeaderHeading } from '@/components/page-header'
 import { buttonVariants } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
+import { authOptions } from '@/lib/next-auth'
 import { cn } from '@/lib/utils'
 import { ArrowRightIcon } from '@radix-ui/react-icons'
-import { useSession } from 'next-auth/react'
+import { getServerSession } from 'next-auth'
+import { getSession, useSession } from 'next-auth/react'
 import Link from "next/link"
 import { redirect, useRouter } from 'next/navigation'
 
-export default function Home() {
-  const session = useSession()
-  const router = useRouter()
+export default async function Home() {
+  // const session = useSession()
+  // const router = useRouter()
+  const session = await getServerSession(authOptions)
 
-  if (session.data?.user.isNewUser) router.push('/new-user')
-  
-  if(session.data?.user.isNewUser === false && session.status === "authenticated") redirect('/careers')
+  if (session?.user.isNewUser) redirect('/new-user')
+
+  if (session?.user.isNewUser === false) redirect('/careers')
 
   return (
     <div>
-        <PageHeader className="pb-8">
+      <PageHeader className="pb-8">
         <Link
           href="/"
           className="inline-flex items-center rounded-lg bg-muted px-3 py-1 text-sm font-medium"
@@ -36,7 +38,7 @@ export default function Home() {
         </Link>
         <PageHeaderHeading>CareerNavigator: Your Path to Success Begins Here.</PageHeaderHeading>
         <PageHeaderDescription>
-        Discover Your Path: Empowering Students for Future Success.
+          Discover Your Path: Empowering Students for Future Success.
         </PageHeaderDescription>
         <div className="flex w-screen justify-center items-center space-x-4 pb-8 pt-4 md:pb-10">
           <Link href="/" className={cn(buttonVariants())}>
