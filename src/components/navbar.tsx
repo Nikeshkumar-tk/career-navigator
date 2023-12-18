@@ -60,9 +60,6 @@ function Navbar() {
                     </span>
                     {session.data.user.email}
                   </p>
-                  <p className="mt-2 cursor-pointer hover:text-gray-300">
-                    Profile
-                  </p>
                   <p className="mt-2 text-red-500 cursor-pointer hover:text-red-400" onClick={() => signOut()}>
                     Logout
                   </p>

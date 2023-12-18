@@ -154,7 +154,7 @@ export default function NewUserSetupPage() {
                                 name="stream"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Stream</FormLabel>
+                                        <FormLabel>Subject/Stream</FormLabel>
                                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                                             <FormControl>
                                                 <SelectTrigger>
