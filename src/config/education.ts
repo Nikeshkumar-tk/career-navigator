@@ -2,14 +2,14 @@
 export const currentlyPursuingEducationNames = ["Bachelor's Degree", "Master's Degree", "12 th", "10 th"] as const
 
 export const currentlyPursuingEducation: Array<{ name: typeof currentlyPursuingEducationNames[number], id: string }> = [
-    {
-        name: "Bachelor's Degree",
-        id: "bachelors-degree"
-    },
-    {
-        name: "Master's Degree",
-        id: "masters-degree"
-    },
+    // {
+    //     name: "Bachelor's Degree",
+    //     id: "bachelors-degree"
+    // },
+    // {
+    //     name: "Master's Degree",
+    //     id: "masters-degree"
+    // },
     {
         name: "12 th",
         id: "12th"
