@@ -1,16 +1,19 @@
+"use client"
+
 export const dynamic = "force-dynamic";
 
-import { buttonVariants } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { authOptions } from "@/lib/next-auth";
 import { cn } from "@/lib/utils";
 import { getServerSession } from "next-auth";
+import { signIn, useSession } from "next-auth/react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import Balancer from "react-wrap-balancer";
-export default async function Home() {
-  const session = await getServerSession(authOptions);
-  const user = session?.user;
-  if (session && !(session?.user.isAccountConfirmed)) {
+export default  function Home() {
+  const session = useSession();
+  const user = session?.data?.user;
+  if (session.status === "authenticated" && !(user?.isAccountConfirmed)) {
     redirect("/new-user");
   }
 
@@ -33,11 +36,16 @@ export default async function Home() {
           Discover Your Path: Empowering Students for Future Success.
         </Balancer>
         <div className="flex flex-wrap items-center justify-center gap-4">
-          <Link href="/quiz" className={cn(buttonVariants())}>
+          {session.status === "authenticated" ? <Link href="/quiz" className={cn(buttonVariants())}>
             Take Quiz
             <span className="sr-only">Take Quiz</span>
-          </Link>
-          <Link
+          </Link> : (
+          <Button onClick={() => signIn("google")}>
+            Sign In
+          </Button>
+          )}
+          
+          {/* <Link
             href="/careers"
             className={cn(
               buttonVariants({
@@ -46,7 +54,7 @@ export default async function Home() {
             )}>
             Check Careers
             <span className="sr-only">Check Careers</span>
-          </Link>
+          </Link> */}
         </div>
       </section>
     </div>

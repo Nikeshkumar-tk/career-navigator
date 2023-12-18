@@ -40,9 +40,9 @@ function Navbar() {
                 </div> */}
             {/* </Link> */}
             <ModeToggle />
-            {session.status === "unauthenticated" && (
+            {/* {session.status === "unauthenticated" && (
               <Button onClick={() => signIn("google")}>Sign In</Button>
-            )}
+            )} */}
             {session.status === "authenticated" && (
               <Popover>
                 <PopoverTrigger>
