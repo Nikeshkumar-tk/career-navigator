@@ -8,3 +8,6 @@ export const Users = mongoose.models.users || mongoose.model('users', userSchema
 
 const quizSchema = new mongoose.Schema({}, {strict: false})
 export const Quizs = mongoose.models.quizs || mongoose.model('quizs', quizSchema)
+
+const careerSchema = new mongoose.Schema({}, {strict: false})
+export const Careers = mongoose.models.careers || mongoose.model('careers', careerSchema)

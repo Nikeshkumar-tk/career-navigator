@@ -5,8 +5,9 @@ import clientPromise from "./mongo-adapter";
 import { Users } from "./mongoose";
 
 type User = DefaultUser & {
-    isNewUser: boolean
+    isAccountConfirmed: boolean
     sub: string
+    attendedQuizs: Array<Record<string, string>>
 }
 
 declare module "next-auth" {
@@ -34,16 +35,27 @@ export const authOptions: NextAuthOptions = {
         async jwt({ token, user, profile }) {
             return token
         },
-        async session({  session, token }) {
+        async session({ session, token }) {
             const existingUser = await Users.findById(token.sub)
-            if(!existingUser.isAccountConfirmed){
-                session.user.isNewUser = true
-            }else{
-                session.user.isNewUser = false
-            }
+            delete existingUser._id
             session.user.sub = token.sub!
+            session.user = {
+                ...session.user,
+                ...JSON.parse(JSON.stringify(existingUser))
+            }
             return session
         },
+    },
+    events: {
+        signIn({ isNewUser, user }) {
+            console.log(isNewUser, user)
+            if (isNewUser) {
+                Users.findOneAndUpdate({ email: user.email }, {
+                    isAccountConfirmed: false,
+                    attendedQuizs: []
+                })
+            }
+        }
     },
     secret: process.env.NEXTAUTH_SECRET
 }

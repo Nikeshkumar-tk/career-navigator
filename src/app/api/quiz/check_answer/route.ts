@@ -1,4 +1,6 @@
-import { Quizs } from "@/lib/mongoose"
+import { Quizs, Users } from "@/lib/mongoose"
+import { authOptions } from "@/lib/next-auth"
+import { getServerSession } from "next-auth"
 
 export async function POST(request: Request) {
     try {
@@ -21,15 +23,35 @@ export async function POST(request: Request) {
                 wrongAnswers.push(answer)
             }
         }
+        const session = await getServerSession(authOptions)
+        await Users.findByIdAndUpdate(session?.user.sub, {
+            $push: {
+                attendedQuizs: {
+                    quizId: body.quizId,
+                    correctAnswers,
+                    wrongAnswers,
+                    education:quiz.education,
+                    stream:quiz.stream,
+                }
+            }
+        
+        })
         return Response.json({
             correctAnswers,
             wrongAnswers
         })
 
     } catch (error) {
-
+        let err: Record<string, string | undefined> | string = "Something went wrong"
+        if (error instanceof Error) {
+            const errObject = {
+                message: error.message,
+                stack: error.stack
+            }
+            err = errObject
+        }
+        return new Response(JSON.stringify(err), {
+            status: 500
+        })
     }
-
-
-
 }

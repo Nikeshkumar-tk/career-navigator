@@ -55,7 +55,17 @@ export default function NewUserSetupPage() {
                 }
             }
             await session.update(newSession)
-            router.push('/')
+            const quiz = await fetch('/api/quiz')
+            const quizData = await quiz.json()
+            if(quizData === "NO_QUIZ"){
+                toast({
+                    title:"No quiz available",
+                    description:"Sorry no quiz currently available for you"
+                })
+                router.push('/quiz')
+            }else{
+                router.push('/quiz/' + quizData._id)
+            }
         }
     })
 
@@ -70,16 +80,18 @@ export default function NewUserSetupPage() {
     function onSubmit(values: UserInfo) {
         const userInfo = {
             ...values,
-            isAccountConfirmed: true
+            isAccountConfirmed: true,
+            attendedQuizs: []
         }
         updateUserMutation.mutate(userInfo)
 
     }
 
     return (
-        <div>
+        <div className="max-w-screen flex justify-center items-center ">
+            <div className="w-[50vw] mt-5 border rounded-md p-7 py-10">
             <h1>Please complete your profile</h1>
-            <div className="w-1/2 mt-3">
+            <div className="mt-3 w-full">
                 <Form {...form} >
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                         <FormField
@@ -237,6 +249,7 @@ export default function NewUserSetupPage() {
                         <Button type="submit" disabled={updateUserMutation.isLoading}>Submit</Button>
                     </form>
                 </Form>
+            </div>
             </div>
         </div >
     )

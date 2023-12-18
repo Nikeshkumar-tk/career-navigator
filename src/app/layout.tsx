@@ -5,6 +5,7 @@ import { Inter } from 'next/font/google'
 import { NextThemeProvider, ReactQueryProvider, SessionProvider } from '@/components/providers'
 import { getServerSession } from 'next-auth'
 import { Toaster } from '@/components/ui/toaster'
+import { SiteFooter } from '@/components/site-footer'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
@@ -31,6 +32,7 @@ export default async function RootLayout({
                 {children}
               </div>
               <Toaster />
+              <SiteFooter />
             </NextThemeProvider>
           </ReactQueryProvider>
         </SessionProvider>

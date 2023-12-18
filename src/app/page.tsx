@@ -1,59 +1,54 @@
+export const dynamic = "force-dynamic";
 
-
-export const dynamic = 'force-dynamic'
-
-import { PageHeader, PageHeaderDescription, PageHeaderHeading } from '@/components/page-header'
-import { buttonVariants } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
-import { authOptions } from '@/lib/next-auth'
-import { cn } from '@/lib/utils'
-import { ArrowRightIcon } from '@radix-ui/react-icons'
-import { getServerSession } from 'next-auth'
-import { getSession, useSession } from 'next-auth/react'
-import Link from "next/link"
-import { redirect, useRouter } from 'next/navigation'
-
+import { buttonVariants } from "@/components/ui/button";
+import { authOptions } from "@/lib/next-auth";
+import { cn } from "@/lib/utils";
+import { getServerSession } from "next-auth";
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import Balancer from "react-wrap-balancer";
 export default async function Home() {
+  const session = await getServerSession(authOptions);
+  const user = session?.user;
+  if (session && !(session?.user.isAccountConfirmed)) {
+    redirect("/new-user");
+  }
 
-  const session = await getServerSession(authOptions)
-
-  if (session?.user.isNewUser) redirect('/new-user')
-
-  if (session?.user.isNewUser === false) redirect('/quiz')
+  // session?.user.isAccountConfirmed && ((user?.attendedQuizs?.length ?? []) === 0)
+  //   ? redirect("/quiz")
+  //   : redirect("/lobby");
 
   return (
-    <div>
-      <PageHeader className="pb-8">
-        <Link
-          href="/"
-          className="inline-flex items-center rounded-lg bg-muted px-3 py-1 text-sm font-medium"
-        >
-          🎉 <Separator className="mx-2 h-4" orientation="vertical" />{" "}
-          <span className="sm:hidden">Style, a new CLI and more.</span>
-          <span className="hidden sm:inline">
-            Take Quiz Now
-          </span>
-          <ArrowRightIcon className="ml-1 h-4 w-4" />
-        </Link>
-        <PageHeaderHeading>CareerNavigator: Your Path to Success Begins Here.</PageHeaderHeading>
-        <PageHeaderDescription>
+    <div className="">
+      <section
+        id="hero"
+        aria-labelledby="hero-heading"
+        className="mx-auto h-[80vh] flex w-full max-w-[64rem] flex-col items-center justify-center gap-4 py-12 text-center md:pt-32">
+        <Balancer
+          as="h1"
+          className="font-heading text-3xl sm:text-5xl md:text-6xl lg:text-7xl">
+          CareerNavigator: Your Path to Success Begins Here.
+        </Balancer>
+        <Balancer className="max-w-[42rem] leading-normal text-muted-foreground sm:text-xl sm:leading-8">
           Discover Your Path: Empowering Students for Future Success.
-        </PageHeaderDescription>
-        <div className="flex w-screen justify-center items-center space-x-4 pb-8 pt-4 md:pb-10">
-          <Link href="/" className={cn(buttonVariants())}>
-            Get Started
+        </Balancer>
+        <div className="flex flex-wrap items-center justify-center gap-4">
+          <Link href="/quiz" className={cn(buttonVariants())}>
+            Take Quiz
+            <span className="sr-only">Take Quiz</span>
           </Link>
-          {/* <Link
-            target="_blank"
-            rel="noreferrer"
-            href={siteConfig.links.github}
-            className={cn(buttonVariants({ variant: "outline" }))}
-          >
-            <Icons.gitHub className="mr-2 h-4 w-4" />
-            GitHub
-          </Link> */}
+          <Link
+            href="/careers"
+            className={cn(
+              buttonVariants({
+                variant: "outline",
+              })
+            )}>
+            Check Careers
+            <span className="sr-only">Check Careers</span>
+          </Link>
         </div>
-      </PageHeader>
+      </section>
     </div>
-  )
+  );
 }

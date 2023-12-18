@@ -16,7 +16,7 @@ export async function GET(request: Request) {
             stream: user.stream
         }
         const quizs = await Quizs.findOne(query)
-        return Response.json(quizs)
+        return Response.json(quizs ? quizs : "NO_QUIZ")
 
     } catch (error) {
         return new Response('Something went wrong', {
