@@ -11,10 +11,15 @@ const dynamic = "force-dynamic";
 export default async function QuizPage() {
     const session = await getServerSession(authOptions);
     if ((session?.user.attendedQuizs ?? [])?.length === 0) {
-        return (<>
-            <h1>No quizes</h1>
-            <ReccommendedQuizes attendedQuizs={[]} />
-        </>
+        return (<div className="h-96">
+            <div className="flex justify-between">
+                <h1 className="text-2xl font-mono">No quizes</h1>
+                <Link href={'/new-user'}>
+                    <Button>Take Quiz</Button>
+                </Link>
+            </div>
+            {/* <ReccommendedQuizes attendedQuizs={[]} /> */}
+        </div>
         )
     }
     return <AttendedQuiz attendedQuizs={session?.user.attendedQuizs!} />
@@ -28,10 +33,10 @@ function AttendedQuiz(props: AttendedQuizProps) {
     return (
         <div>
             <div className="flex justify-between">
-            <h1 className="text-2xl font-mono">Quizes you attended.</h1>
-            <Link href={'/new-user'}>
-            <Button>Take Quiz</Button>
-            </Link>
+                <h1 className="text-2xl font-mono">Quizes you attended.</h1>
+                <Link href={'/new-user'}>
+                    <Button>Take Quiz</Button>
+                </Link>
             </div>
             <div className="mt-5 flex gap-3">
                 {props.attendedQuizs.map((quiz) => (
@@ -72,7 +77,7 @@ async function ReccommendedQuizes(props: ReccommendedQuizesProps) {
                         </CardHeader>
                         <CardFooter>
                             <Link href={`/quiz/${quiz._id}`}>
-                            <Button>Take Quiz</Button>
+                                <Button>Take Quiz</Button>
                             </Link>
                         </CardFooter>
                     </Card>
