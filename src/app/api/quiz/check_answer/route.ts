@@ -18,11 +18,14 @@ export async function POST(request: Request) {
             //@ts-ignore
             const questionObject = parsedQuiz.questions.find(question => question.id === answer.questionId)
             if (questionObject.answer === answer.answer) {
-                correctAnswers.push(answer)
+                correctAnswers.push(questionObject)
             } else {
-                wrongAnswers.push(answer)
+                wrongAnswers.push(questionObject)
             }
+            
         }
+        const careerArray = correctAnswers.map((question: any) => question.career)
+        const suggestedCareers = careerArray.filter((element, index) => careerArray.indexOf(element) !== index)
         const session = await getServerSession(authOptions)
         await Users.findByIdAndUpdate(session?.user.sub, {
             $push: {
@@ -30,15 +33,16 @@ export async function POST(request: Request) {
                     quizId: body.quizId,
                     correctAnswers,
                     wrongAnswers,
-                    education:quiz.education,
-                    stream:quiz.stream,
+                    education: quiz.education,
+                    stream: quiz.stream,
                 }
             }
-        
+
         })
         return Response.json({
             correctAnswers,
-            wrongAnswers
+            wrongAnswers,
+            suggestedCareers
         })
 
     } catch (error) {

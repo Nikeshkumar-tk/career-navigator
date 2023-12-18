@@ -22,3 +22,5 @@ export default async function CareerPage() {
         </div>
     </div>)
 }
+
+  

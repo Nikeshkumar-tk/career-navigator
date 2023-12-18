@@ -40,7 +40,7 @@ type TakeQuizPage = {
 export function TakeQuizPage(props: TakeQuizPage) {
     const [answers, setAnswers] = useState<Map<string, string>>(new Map())
     const [openAnswerDialog, setOpenAnswerDialog] = useState(false);
-    const router = useRouter()
+    const [openCareerDialog, setOpenCareerDialog] = useState(false);
     const { data: quiz, ...getQuizsQuery } = useQuery('getQuizsById', async () => {
         const response = await fetch('/api/quiz/getQuizById?quizId=' + props.quizId)
         return await response.json()
@@ -88,7 +88,7 @@ export function TakeQuizPage(props: TakeQuizPage) {
             <h1 className="text-2xl">Please answer the questions</h1>
             <div className="flex flex-col gap-3 mt-2">
                 <div className="w-full h-full flex justify-center items-center">
-                {getQuizsQuery.isLoading && <Icons.spinner className="animate-spin h-14 w-14"/>}
+                    {getQuizsQuery.isLoading && <Icons.spinner className="animate-spin h-14 w-14" />}
                 </div>
                 {quiz?.questions.map((question: any, index: number) => (
                     <Card key={index}>
@@ -113,8 +113,9 @@ export function TakeQuizPage(props: TakeQuizPage) {
                 <Button onClick={handleSubmit}>Submit</Button>
             </div>
             <Dialog open={openAnswerDialog} onOpenChange={() => {
-                router.push('/quiz')
+                // router.push('/quiz')
                 setOpenAnswerDialog(false)
+                setOpenCareerDialog(true)
             }}>
                 <DialogContent>
                     <DialogHeader>
@@ -122,18 +123,52 @@ export function TakeQuizPage(props: TakeQuizPage) {
                     </DialogHeader>
                     <h4>Correct answers : {checkAnswersMutation.data?.correctAnswers.length}</h4>
                     <h4>Wrong answers : {checkAnswersMutation.data?.wrongAnswers.length}</h4>
-                <DialogFooter>
-                    <Button onClick={() => {
-                        router.push('/quiz')
-                        setOpenAnswerDialog(false)
-                        revalidatePath('/quiz')
-                    }}>Close</Button>
-                </DialogFooter>
+                    <DialogFooter>
+                        <Button onClick={() => {
+                            setOpenAnswerDialog(false)
+                            setOpenCareerDialog(true)
+                        }}>Close</Button>
+                    </DialogFooter>
                 </DialogContent>
             </Dialog>
+            <ShowSuggestedCareer careers={checkAnswersMutation.data?.suggestedCareers} open={openCareerDialog} setOpen={setOpenCareerDialog} />
         </div>
     )
 }
+//@ts-ignore
+function ShowSuggestedCareer({ open, setOpen, careers }) {
+    const router = useRouter()
 
-const bachelorDegrees = ["Bachelor's or Master's degree in Social Work(BSW or MSW)", "second course", ]
+    return (
+        <Dialog open={open} onOpenChange={setOpen}>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>Careers suggested for you based on quiz</DialogTitle>
+                </DialogHeader>
+                <DialogDescription>
+                    {careers?.length === 0 ? (
+                        <p>Oops there is no career suggested for you now </p>
+                    ) : (
+                        <>
+                            <ul>
+                                {careers?.map((career: any, index: number) => (
+                                    <li key={index}>{career}</li>
+                                ))}
+                                <li>test</li>
+                            </ul>
+                        </>
+                    )}
+                </DialogDescription>
+                <DialogFooter>
+                    <Button onClick={() => {
+                        setOpen(false)
+                        router.push('/quiz')
+                    }}>Close</Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
+    )
+}
+
+const bachelorDegrees = ["Bachelor's or Master's degree in Social Work(BSW or MSW)", "second course",]
 const masterDegrees = ["Masters course 1", "masters course 2", "masters course 3"]

@@ -27,7 +27,12 @@ type AttendedQuizProps = {
 function AttendedQuiz(props: AttendedQuizProps) {
     return (
         <div>
+            <div className="flex justify-between">
             <h1 className="text-2xl font-mono">Quizes you attended.</h1>
+            <Link href={'/new-user'}>
+            <Button>Take Quiz</Button>
+            </Link>
+            </div>
             <div className="mt-5 flex gap-3">
                 {props.attendedQuizs.map((quiz) => (
                     <Card key={quiz.quizId} className="w-[20rem] hover:shadow-md cursor-pointer hover:bg-gray-900">
@@ -44,7 +49,7 @@ function AttendedQuiz(props: AttendedQuizProps) {
                     </Card>
                 ))}
             </div>
-            <ReccommendedQuizes attendedQuizs={props.attendedQuizs} />
+            {/* <ReccommendedQuizes attendedQuizs={props.attendedQuizs} /> */}
         </div>
     )
 }
