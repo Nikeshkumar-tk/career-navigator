@@ -154,7 +154,6 @@ function ShowSuggestedCareer({ open, setOpen, careers }) {
                                 {careers?.map((career: any, index: number) => (
                                     <li key={index}>{career}</li>
                                 ))}
-                                <li>test</li>
                             </ul>
                         </>
                     )}
